@@ -25,7 +25,7 @@ export default (state = defaultState, action) => {
 
     if(action.type === "delete_todo_list") {
         const newState = {...state}
-        newState.list.splice(newState.index, 1)
+        newState.list.splice(action.index, 1)
         return newState;
     }
     return state
