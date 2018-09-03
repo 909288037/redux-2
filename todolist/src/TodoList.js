@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Input, Button, List } from "antd";
 import "antd/dist/antd.css";
 import store from "./store/index";
+import {getInputChangeAction, getAddItemAction, getDeleteItemAction} from "./store/actionCreators";
 
 class TodoList extends Component {
   constructor(props) {
@@ -15,10 +16,12 @@ class TodoList extends Component {
   }
 
   handleInputChange(e) {
-    const action = {
-      type: "change_input_value",
-      value: e.target.value
-    };
+    // const action = {
+    //   type: CHANGE_INPUT_VALUE,
+    //   value: e.target.value
+    // };
+
+    const action = getInputChangeAction(e.target.value)
     // 将数据传递到store
     store.dispatch(action);
   }
@@ -28,18 +31,12 @@ class TodoList extends Component {
   }
 
   handleBtnClick() {
-    const action = {
-      type: "add_todo_item"
-    };
+    const action = getAddItemAction()
     store.dispatch(action);
   }
 
   handleItemDelete(index) {
-    console.log(index);
-    const action = {
-        type: "delete_todo_list",
-        index: index
-    }
+    const action = getDeleteItemAction()
     store.dispatch(action);
 
 
