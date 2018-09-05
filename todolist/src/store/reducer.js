@@ -1,4 +1,4 @@
-import {CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_LIST} from "./actionType";
+import {CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_LIST, INIT_LIST_ACTION} from "./actionType";
 
 const defaultState = {
     inputValue: '123',
@@ -28,6 +28,12 @@ export default (state = defaultState, action) => {
     if(action.type === DELETE_TODO_LIST) {
         const newState = {...state}
         newState.list.splice(action.index, 1)
+        return newState;
+    }
+
+    if(action.type === INIT_LIST_ACTION) {
+        const newState = {...state}
+        newState.list = action.data
         return newState;
     }
     return state

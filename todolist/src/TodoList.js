@@ -1,8 +1,17 @@
-import React, { Component } from "react";
+import React, {
+  Component
+} from "react";
 import TodoListUI from "./TodoListUI"
 import "antd/dist/antd.css";
 import store from "./store/index";
-import {getInputChangeAction, getAddItemAction, getDeleteItemAction} from "./store/actionCreators";
+import {
+  getInputChangeAction,
+  getAddItemAction,
+  getDeleteItemAction,
+  initListAction
+} from "./store/actionCreators";
+import axios from "axios"
+
 
 class TodoList extends Component {
   constructor(props) {
@@ -37,22 +46,40 @@ class TodoList extends Component {
   }
 
   handleItemDelete(index) {
-    console.log(index);
-    
+
     const action = getDeleteItemAction(index)
     store.dispatch(action);
+  }
 
-
+  componentDidMount() {
+    axios.get("/list").then((res) => {
+      const data = res.data
+      
+      const action = initListAction(data)
+      store.dispatch(action);
+    }).catch(err => {
+      console.log(err);
+      
+    })
   }
 
   render() {
-    return (
-      <TodoListUI 
-      inputValue={this.state.inputValue} 
-      handleInputChange={this.handleInputChange}
-      handleBtnClick={this.handleBtnClick}
-      handleItemDelete={this.handleItemDelete}
-      list={this.state.list}
+    return ( <
+      TodoListUI inputValue = {
+        this.state.inputValue
+      }
+      handleInputChange = {
+        this.handleInputChange
+      }
+      handleBtnClick = {
+        this.handleBtnClick
+      }
+      handleItemDelete = {
+        this.handleItemDelete
+      }
+      list = {
+        this.state.list
+      }
       />
     );
   }
