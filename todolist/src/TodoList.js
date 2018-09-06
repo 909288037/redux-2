@@ -8,9 +8,8 @@ import {
   getInputChangeAction,
   getAddItemAction,
   getDeleteItemAction,
-  initListAction
+  getTodoList
 } from "./store/actionCreators";
-import axios from "axios"
 
 
 class TodoList extends Component {
@@ -52,15 +51,8 @@ class TodoList extends Component {
   }
 
   componentDidMount() {
-    axios.get("/list").then((res) => {
-      const data = res.data
-      
-      const action = initListAction(data)
-      store.dispatch(action);
-    }).catch(err => {
-      console.log(err);
-      
-    })
+    const action = getTodoList()
+    store.dispatch(action)
   }
 
   render() {
