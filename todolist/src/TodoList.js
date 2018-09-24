@@ -1,80 +1,66 @@
-import React, {
-  Component
-} from "react";
-import TodoListUI from "./TodoListUI"
-import "antd/dist/antd.css";
-import store from "./store/index";
+import React from "react";
+import { connect } from "react-redux";
 import {
-  getInputChangeAction,
+  getInputValue,
   getAddItemAction,
-  getDeleteItemAction,
-  getTodoList
-} from "./store/actionCreators";
+  getDeleteItemAction
+} from "./store/actionCretors";
 
+const TodoList = props => {
+  const {
+    inputValue,
+    changeInputValue,
+    hangdleClick,
+    list,
+    handleDelete,
+  } = props;
 
-class TodoList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = store.getState();
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleStoreChange = this.handleStoreChange.bind(this);
-    this.handleBtnClick = this.handleBtnClick.bind(this);
-    this.handleItemDelete = this.handleItemDelete.bind(this);
-    // store 更新触发
-    store.subscribe(this.handleStoreChange);
-  }
+  return (
+    <div>
+      <div>
+        <input value={inputValue} onChange={changeInputValue} />
+        <button onClick={hangdleClick}> 提交 </button>
+      </div>
+      <ul>
+        {list.map((item, index) => {
+          return (
+            <li key={item} onClick={handleDelete.bind(this, index)}>
+              {item}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
 
-  handleInputChange(e) {
-    // const action = {
-    //   type: CHANGE_INPUT_VALUE,
-    //   value: e.target.value
-    // };
+const mapStateToProps = state => {
+  return {
+    inputValue: state.inputValue,
+    list: state.list
+  };
+};
 
-    const action = getInputChangeAction(e.target.value)
-    // 将数据传递到store
-    store.dispatch(action);
-  }
+const mapDispatchToProps = dispatch => {
+  return {
+    changeInputValue(e) {
+      const action = getInputValue(e.target.value);
+      dispatch(action);
+    },
 
-  handleStoreChange() {
-    this.setState(store.getState());
-  }
+    hangdleClick() {
+      const action = getAddItemAction();
+      dispatch(action);
+    },
 
-  handleBtnClick() {
-    const action = getAddItemAction()
-    store.dispatch(action);
-  }
+    handleDelete(index) {
+      const action = getDeleteItemAction(index);
+      dispatch(action);
+    }
+  };
+};
 
-  handleItemDelete(index) {
-
-    const action = getDeleteItemAction(index)
-    store.dispatch(action);
-  }
-
-  componentDidMount() {
-    const action = getTodoList()
-    store.dispatch(action)
-  }
-
-  render() {
-    return ( <
-      TodoListUI inputValue = {
-        this.state.inputValue
-      }
-      handleInputChange = {
-        this.handleInputChange
-      }
-      handleBtnClick = {
-        this.handleBtnClick
-      }
-      handleItemDelete = {
-        this.handleItemDelete
-      }
-      list = {
-        this.state.list
-      }
-      />
-    );
-  }
-}
-
-export default TodoList;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList);

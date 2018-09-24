@@ -1,40 +1,50 @@
-import {CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_LIST, INIT_LIST_ACTION} from "./actionType";
+import {Change_Input_Value, Add_Item, Delete_Item} from './actionTypes'
 
 const defaultState = {
-    inputValue: '123',
+    inputValue: '',
     list: []
 }
 
-// reducer 只能接收state不能修改state
-// state 整个store的数据 action 接收dispatch传过来的数据
 export default (state = defaultState, action) => {
-    if(action.type === CHANGE_INPUT_VALUE) {
-        const newState = JSON.parse(JSON.stringify(state));
-        newState.inputValue = action.value;
-        return newState;
+
+    if(action.type === Change_Input_Value) {
+        return {
+                ...state, inputValue: action.inputValue
+        }
     }
 
-    if(action.type === ADD_TODO_ITEM) {
-        // const newState = JSON.parse(JSON.stringify(state));
-        // newState.list.push(newState.inputValue)
-        // newState.inputValue = '';
-        // console.log(newState)
-        const newState = {...state}
+    if(action.type === Add_Item) {
+        let newState = { ...state}
         newState.list.push(newState.inputValue)
         newState.inputValue = '';
-        return newState;
+        return newState
     }
 
-    if(action.type === DELETE_TODO_LIST) {
-        const newState = {...state}
+    if(action.type === Delete_Item) {
+        let newState = JSON.parse(JSON.stringify(state))
         newState.list.splice(action.index, 1)
-        return newState;
+        return newState
     }
 
-    if(action.type === INIT_LIST_ACTION) {
-        const newState = {...state}
-        newState.list = action.data
-        return newState;
-    }
     return state
+    // switch (action.type) {
+    //     case Change_Input_Value:
+    //     return {
+    //         ...state, inputValue: action.inputValue
+    //     }
+
+    //     case Add_Item:
+    //     let newState = {...state}
+    //     newState.list.push(newState.inputValue)
+    //     newState.inputValue = '';
+    //     return newState
+
+    //     case Delete_Item:
+    //     let newState = {...state}
+    //     newState.list.splice(action.index, 1)
+    //     return newState
+
+    //     default: 
+    //     return state
+    // }
 }
